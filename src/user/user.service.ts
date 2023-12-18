@@ -1,45 +1,44 @@
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Inject, NotFoundException } from '@nestjs/common';
 import { User } from './interfaces/user.interface';
+import { UserRepository } from './user.repository';
 
 export class UserService {
-  constructor(private users: User[] = []) {}
+  constructor(
+    @Inject('UserRepository') private userRepository: UserRepository,
+  ) {}
 
   create(user: Omit<User, 'id'>) {
     const userExists = this.getByEmail(user.email);
 
     if (userExists) throw new BadRequestException('User already exists');
 
-    this.users.push({
-      ...user,
-      id: Date.now().toString(),
-    });
+    this.userRepository.create(user);
   }
 
   getAll() {
-    return this.users;
+    return this.userRepository.getAll();
   }
 
   getById(id: string) {
-    return this.users.find((user) => user.id === id);
+    return this.userRepository.getById(id);
   }
 
   getByEmail(email: string) {
-    return this.users.find((user) => user.email === email);
+    return this.userRepository.getByEmail(email);
   }
 
   update(id: string, newUserInformation: Partial<User>) {
     const user = this.getById(id);
     if (!user) throw new NotFoundException('User not found');
 
-    Object.assign(user, newUserInformation);
-
-    return user;
+    const updatedUser = this.userRepository.update(id, newUserInformation);
+    return updatedUser;
   }
 
   delete(id: string) {
     const user = this.getById(id);
     if (!user) throw new NotFoundException('User not found');
 
-    this.users = this.users.filter((user) => user.id !== id);
+    this.userRepository.delete(id);
   }
 }
