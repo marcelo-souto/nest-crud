@@ -6,10 +6,13 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UserService } from './user.service';
+
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -17,7 +20,7 @@ export class UserController {
 
   @Post()
   create(@Body(new ValidationPipe()) createUserDTO: CreateUserDTO) {
-    this.userService.create(createUserDTO);
+    return this.userService.create(createUserDTO);
   }
 
   @Get(':id')
@@ -25,6 +28,7 @@ export class UserController {
     return this.userService.getById(id);
   }
 
+  @UseGuards(AuthGuard)
   @Get()
   getAll() {
     return this.userService.getAll();

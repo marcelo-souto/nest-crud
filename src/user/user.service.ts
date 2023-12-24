@@ -13,6 +13,8 @@ export class UserService {
     if (userExists) throw new BadRequestException('User already exists');
 
     this.userRepository.create(user);
+
+    return user;
   }
 
   getAll() {
