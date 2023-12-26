@@ -24,7 +24,7 @@ export class AuthService {
 
     const result = {
       token: this.jwtService.sign(
-        { email: user.email },
+        { id: user.id },
         {
           secret: this.configService.get('jwt.secret'),
           expiresIn: this.configService.get('jwt.expiresIn'),

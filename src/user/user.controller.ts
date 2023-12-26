@@ -13,6 +13,7 @@ import { CreateUserDTO } from './dto/create-user.dto';
 import { UserService } from './user.service';
 
 import { AuthGuard } from 'src/guards/auth.guard';
+import { GetUserByIdDTO } from './dto/get-user-by-id.dto';
 
 @Controller('user')
 export class UserController {
@@ -23,27 +24,28 @@ export class UserController {
     return this.userService.create(createUserDTO);
   }
 
-  @Get(':id')
-  getById(@Param('id') id: string) {
-    return this.userService.getById(id);
-  }
-
   @UseGuards(AuthGuard)
   @Get()
-  getAll() {
-    return this.userService.getAll();
+  getById(@Body(new ValidationPipe()) user: GetUserByIdDTO) {
+    return this.userService.getById(user.id);
   }
 
-  @Delete(':id')
-  delete(@Param('id') id: string) {
-    return this.userService.delete(id);
-  }
+  // @UseGuards(AuthGuard)
+  // @Get()
+  // getAll() {
+  //   return this.userService.getAll();
+  // }
 
-  @Put(':id')
-  update(
-    @Param('id') id: string,
-    @Body(new ValidationPipe()) updateUserDTO: Partial<CreateUserDTO>,
-  ) {
-    return this.userService.update(id, updateUserDTO);
-  }
+  // @Delete(':id')
+  // delete(@Param('id') id: string) {
+  //   return this.userService.delete(id);
+  // }
+
+  // @Put(':id')
+  // update(
+  //   @Param('id') id: string,
+  //   @Body(new ValidationPipe()) updateUserDTO: Partial<CreateUserDTO>,
+  // ) {
+  //   return this.userService.update(id, updateUserDTO);
+  // }
 }

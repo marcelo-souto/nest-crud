@@ -22,7 +22,11 @@ export class UserService {
   }
 
   getById(id: string) {
-    return this.userRepository.getById(id);
+    const user = this.userRepository.getById(id);
+
+    if (!user) throw new NotFoundException('User not found');
+
+    return user;
   }
 
   getByEmail(email: string) {

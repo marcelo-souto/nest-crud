@@ -30,7 +30,7 @@ export class AuthGuard implements CanActivate {
         secret: this.configService.get('jwt.secret'),
       });
 
-      request.user = payload;
+      request.body = payload;
     } catch {
       throw new UnauthorizedException(
         "You don't have permission to access this resource",
