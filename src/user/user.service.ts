@@ -14,7 +14,7 @@ export class UserService {
 
     this.userRepository.create(user);
 
-    return user;
+    return { user };
   }
 
   getAll() {
@@ -26,7 +26,7 @@ export class UserService {
 
     if (!user) throw new NotFoundException('User not found');
 
-    return user;
+    return { user };
   }
 
   getByEmail(email: string) {

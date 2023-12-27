@@ -3,7 +3,15 @@ import { User } from './interfaces/user.interface';
 
 @Injectable()
 export class UserRepository {
-  users: User[] = [];
+  users: User[] = [
+    {
+      id: '1',
+      name: 'Marcelo Souto',
+      email: 'marcelo@email.com',
+      password: '123456',
+      roles: [1],
+    },
+  ];
 
   create(user: Omit<User, 'id'>) {
     this.users.push({
