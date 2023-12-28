@@ -9,7 +9,7 @@ export class UserRepository {
       name: 'Marcelo Souto',
       email: 'marcelo@email.com',
       password: '123456',
-      roles: [1],
+      roles: [2],
     },
   ];
 

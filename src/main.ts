@@ -10,8 +10,9 @@ async function bootstrap() {
   const port = configService.get('app.port');
 
   const config = new DocumentBuilder()
-    .setTitle('Cats example')
-    .setDescription('The cats API description')
+    .addBearerAuth()
+    .setTitle('Swagger Api Example')
+    .setDescription('The Swagger Api Example description')
     .setVersion('1.0')
     .build();
 

@@ -7,7 +7,12 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiHeader,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 
 // DTOs and interfaces
 import { CreateUserDTO } from './dto/create-user.dto';
@@ -27,15 +32,20 @@ import { Role } from 'src/decorators/roles.enum';
 export class UserController {
   constructor(private userService: UserService) {}
 
-  /** Create a new user */
+  @ApiOperation({
+    description: 'Create a new user',
+  })
   @Post()
   create(@Body(new ValidationPipe()) createUserDTO: CreateUserDTO) {
     return this.userService.create(createUserDTO);
   }
 
-  /** Get user by id */
+  @ApiOperation({
+    description: 'Get a user by id',
+  })
+  @ApiBearerAuth()
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles(Role.ADMIN)
+  @Roles(Role.USER)
   @Get()
   getById(@Body() user: Pick<User, 'id'>) {
     return this.userService.getById(user.id);
