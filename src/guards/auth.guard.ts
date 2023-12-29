@@ -7,15 +7,27 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
+import { Reflector } from '@nestjs/core';
+import { AUTHENTICATED_KEY } from 'src/decorators/authenticated.decorator';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
+    private reflector: Reflector,
     private configService: ConfigService,
     private jwtService: JwtService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    const authenticated = this.reflector.getAllAndOverride<boolean>(
+      AUTHENTICATED_KEY,
+      [context.getHandler(), context.getClass()],
+    );
+
+    if (!authenticated) {
+      return true;
+    }
+
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
 

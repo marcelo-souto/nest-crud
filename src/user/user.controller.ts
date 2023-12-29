@@ -1,18 +1,6 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  UseGuards,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Body, Controller, Get, Post, ValidationPipe } from '@nestjs/common';
 
-import {
-  ApiBearerAuth,
-  ApiHeader,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 // DTOs and interfaces
 import { CreateUserDTO } from './dto/create-user.dto';
@@ -22,10 +10,9 @@ import { User } from './interfaces/user.interface';
 import { UserService } from './user.service';
 
 // Guards
-import { AuthGuard } from 'src/guards/auth.guard';
-import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/decorators/roles.enum';
+import { Authenticated } from 'src/decorators/authenticated.decorator';
 
 @ApiTags('user')
 @Controller('user')
@@ -44,7 +31,7 @@ export class UserController {
     description: 'Get a user by id',
   })
   @ApiBearerAuth()
-  @UseGuards(AuthGuard, RolesGuard)
+  @Authenticated()
   @Roles(Role.USER)
   @Get()
   getById(@Body() user: Pick<User, 'id'>) {
