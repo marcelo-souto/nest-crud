@@ -10,9 +10,7 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Post('login')
-  signIn(@Body() signInDTO: SignInDTO) {
-    const { email, password } = signInDTO;
-
-    return this.authService.signIn(email, password);
+  async signIn(@Body() signInDTO: SignInDTO) {
+    return this.authService.signIn(signInDTO);
   }
 }

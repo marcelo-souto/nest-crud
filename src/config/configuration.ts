@@ -13,4 +13,7 @@ export default () => ({
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_DATABASE,
   },
+  hash: {
+    saltOrRounds: Number(process.env.BCRYPT_SALT_OR_ROUNDS),
+  },
 });

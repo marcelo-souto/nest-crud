@@ -7,9 +7,10 @@ import { AuthGuard } from 'src/guards/auth.guard';
 // import { RolesGuard } from 'src/guards/roles.guard';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
+import { HashModule } from 'src/providers/hash.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [TypeOrmModule.forFeature([User]), HashModule],
   controllers: [UserController],
   providers: [
     UserService,
