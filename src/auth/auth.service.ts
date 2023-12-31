@@ -12,7 +12,7 @@ export class AuthService {
   ) {}
 
   signIn(email: string, password: string): any {
-    const user = this.userService.getByEmail(email);
+    const user = { id: '', password: '' };
 
     if (!user) {
       throw new UnauthorizedException();
@@ -24,7 +24,7 @@ export class AuthService {
 
     const result = {
       token: this.jwtService.sign(
-        { id: user.id, roles: user.roles },
+        { id: user.id },
         {
           secret: this.configService.get('jwt.secret'),
           expiresIn: this.configService.get('jwt.expiresIn'),

@@ -1,50 +1,25 @@
-import { BadRequestException, Inject, NotFoundException } from '@nestjs/common';
-import { User } from './interfaces/user.interface';
-import { UserRepository } from './user.repository';
+import { BadRequestException } from '@nestjs/common';
+import { EntityManager, Repository } from 'typeorm';
+import { User } from './user.entity';
+import { CreateUserDTO } from './dto/create-user.dto';
+import { InjectRepository } from '@nestjs/typeorm';
 
 export class UserService {
   constructor(
-    @Inject('UserRepository') private userRepository: UserRepository,
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    private readonly entityManager: EntityManager,
   ) {}
 
-  create(user: Omit<User, 'id'>) {
-    const userExists = this.getByEmail(user.email);
+  async create(user: CreateUserDTO) {
+    const userExists = await this.userRepository.findBy({ email: user.email });
+
+    console.log(userExists);
 
     if (userExists) throw new BadRequestException('User already exists');
 
-    this.userRepository.create(user);
+    const newUser = new User(user);
+    await this.entityManager.save(newUser);
 
-    return { user };
-  }
-
-  getAll() {
-    return this.userRepository.getAll();
-  }
-
-  getById(id: string) {
-    const user = this.userRepository.getById(id);
-
-    if (!user) throw new NotFoundException('User not found');
-
-    return { user };
-  }
-
-  getByEmail(email: string) {
-    return this.userRepository.getByEmail(email);
-  }
-
-  update(id: string, newUserInformation: Partial<User>) {
-    const user = this.getById(id);
-    if (!user) throw new NotFoundException('User not found');
-
-    const updatedUser = this.userRepository.update(id, newUserInformation);
-    return updatedUser;
-  }
-
-  delete(id: string) {
-    const user = this.getById(id);
-    if (!user) throw new NotFoundException('User not found');
-
-    this.userRepository.delete(id);
+    return { user: newUser };
   }
 }

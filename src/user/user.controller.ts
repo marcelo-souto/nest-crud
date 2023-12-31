@@ -10,8 +10,6 @@ import { User } from './interfaces/user.interface';
 import { UserService } from './user.service';
 
 // Guards
-import { Roles } from 'src/decorators/roles.decorator';
-import { Role } from 'src/decorators/roles.enum';
 import { Authenticated } from 'src/decorators/authenticated.decorator';
 
 @ApiTags('user')
@@ -23,7 +21,7 @@ export class UserController {
     description: 'Create a new user',
   })
   @Post()
-  create(@Body(new ValidationPipe()) createUserDTO: CreateUserDTO) {
+  async create(@Body(new ValidationPipe()) createUserDTO: CreateUserDTO) {
     return this.userService.create(createUserDTO);
   }
 
@@ -32,10 +30,9 @@ export class UserController {
   })
   @ApiBearerAuth()
   @Authenticated()
-  @Roles(Role.USER)
   @Get()
   getById(@Body() user: Pick<User, 'id'>) {
-    return this.userService.getById(user.id);
+    return 'this.userService.getById(user.id);';
   }
 
   // @UseGuards(AuthGuard)

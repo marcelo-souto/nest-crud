@@ -9,10 +9,12 @@ import configuration from './config/configuration';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { TransformInterceptor } from './interceptors/transform.interceptor';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, load: [configuration] }),
+    DatabaseModule,
     UserModule,
     AuthModule,
   ],

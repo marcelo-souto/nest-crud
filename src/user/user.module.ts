@@ -1,18 +1,21 @@
 import { Module } from '@nestjs/common';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
-import { UserRepository } from './user.repository';
+// import { UserRepository } from './user.repository';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from 'src/guards/auth.guard';
-import { RolesGuard } from 'src/guards/roles.guard';
+// import { RolesGuard } from 'src/guards/roles.guard';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './user.entity';
 
 @Module({
+  imports: [TypeOrmModule.forFeature([User])],
   controllers: [UserController],
   providers: [
     UserService,
-    { provide: 'UserRepository', useClass: UserRepository },
+    // { provide: 'UserRepository', useClass: UserRepository },
     { provide: APP_GUARD, useClass: AuthGuard },
-    { provide: APP_GUARD, useClass: RolesGuard },
+    // { provide: APP_GUARD, useClass: RolesGuard },
   ],
   exports: [UserService],
 })
